@@ -1,0 +1,47 @@
+================================================================
+MANUAL DE OPERACIONES Y POLÍTICAS - AURA VITALIS ECO-RESORT & SPA
+================================================================
+
+MÓDULO 1: IDENTIDAD CORPORATIVA Y CONCEPTO
+Aura Vitalis Eco-Resort & Spa es un hotel boutique de lujo enfocado en bienestar, sostenibilidad y desconexión total.
+Ubicación: Kilómetro 4.5, Vía al Parque Nacional Natural Tayrona, Magdalena, Colombia (entre la selva tropical y el mar Caribe).
+Lema Comercial: "Donde el bienestar encuentra su naturaleza."
+Misión: Ofrecer una experiencia de hospitalidad regenerativa de clase mundial, donde el lujo consciente y la naturaleza se fusionan para restaurar el equilibrio físico, mental y espiritual.
+Video Oficial del Hotel: Para conocer nuestras playas, senderos e instalaciones bioclimáticas, disponemos de nuestro recorrido audiovisual.
+[MOSTRAR_VIDEO: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4]
+
+MÓDULO 2: INVENTARIO DE HABITACIONES Y TARIFAS
+Nota: Tarifas base en USD por noche, no incluyen impuestos hoteleros (IVA del 19%).
+- Canopy Bungalow: Capacidad máxima 2 Adultos (Exclusivo adultos). Área: 45 m². Tarifa: $350 USD. Suspendido entre los árboles, cama King, ducha de tipo lluvia al aire libre, terraza con malla de catamarán. Sin televisor para desconexión. [MOSTRAR_IMAGEN: https://picsum.photos/id/10/800/600]
+- Garden Oasis Suite: Capacidad máxima 3 personas (adultos o niños). Área: 60 m². Tarifa: $480 USD. Vista a jardines botánicos privados, dos camas Queen, tina de hidromasaje artesanal de piedra, minibar orgánico de cortesía. [MOSTRAR_IMAGEN: https://picsum.photos/id/28/800/600]
+- Ocean Wellness Villa: Capacidad máxima 4 personas (máximo 3 adultos). Área: 95 m². Tarifa: $750 USD. Frente al mar Caribe, habitación principal King, sofá cama doble, piscina privada (plunge pool), esterillas de yoga y kit de meditación. [MOSTRAR_IMAGEN: https://picsum.photos/id/43/800/600]
+
+MÓDULO 3: ÁREAS COMUNES, SERVICIOS Y HORARIOS
+- Santuario Spa "Agua Viva": Operación de 08:00 a 20:00. Tratamientos requieren reserva previa (4 horas). Circuito de hidroterapia (sauna, turco, pozas) es libre para huéspedes de 08:00 a 12:00; luego cuesta $45 USD por persona (gratis ilimitado para Ocean Wellness Villa). Exclusivo mayores de 16 años.
+- Restaurante "Raíces Ancestrales": Desayuno Buffet Saludable de 06:30 a 10:30 (incluido). Almuerzo a la carta de 12:30 a 15:30. Cena de Autor de 19:00 a 22:30 (Código: Resort Casual, no traje de baño ni descalzos). Room Service de 07:00 a 22:00 con recargo del 10%.
+- Piscina Infinita "Espejo de Agua": Abierta de 07:00 a 19:00. Sin salvavidas permanente; menores de 12 años deben estar acompañados. Prohibidos envases de vidrio.
+- Plataforma de Yoga "Prana": Abierta 24 horas para práctica libre. Clases guiadas gratis de Yoga de 06:30 a 07:30 y meditación a las 17:30.
+- Sendero Ecológico "Yakaré": Permitido de 06:00 a 17:30 por seguridad. Obligatorio registrar salida en recepción y calzado cerrado. Prohibido extraer flora/fauna.
+
+MÓDULO 4: REGLAMENTO INTERNO, PRIVACIDAD Y CONVIVENCIA
+- Política de Silencio: Horas de silencio absoluto de 22:00 a 07:00. Prohibidos altavoces en áreas comunes sin auriculares.
+- Política de Humo: 100% Libre de Humo (incluye vapes). Incumplimiento genera multa de $250 USD por sanitización.
+- Política de Mascotas: No se permiten mascotas para proteger la fauna silvestre del Tayrona. Excepción: Perros de asistencia certificados con preaviso de 48 horas y carné de vacunación.
+- Drones y Fotos: Prohibido el uso de drones. Sesiones comerciales requieren tasa especial y permiso de Gerencia.
+- Privacidad de Datos: Los datos se procesan para reservas bajo la ley de protección de datos. El agente de IA nunca solicitará tarjetas de crédito ni contraseñas; redirigirá a pasarelas seguras.
+
+MÓDULO 5: POLÍTICAS DE CHECK-IN, CHECK-OUT, CANCELACIONES Y MENORES
+- Check-in: A partir de las 15:00. Requiere ID oficial vigente y tarjeta de crédito para garantía por consumos ($150 USD por noche).
+- Check-out: Hasta las 11:00. Late check-out hasta las 14:00 cuesta el 50% de la tarifa; después de las 14:00 cuesta el 100%.
+- Cancelación Flexible: Con más de 14 días se reembolsa el 100% (menos $30 USD de administración). Entre 7 y 14 días da un bono de crédito válido por 12 meses. Con menos de 7 días no hay reembolso ni crédito (penalidad del 100%).
+- Tarifas No Reembolsables: Promociones no admiten cambios, créditos ni devoluciones.
+- No Show: Habitación se retiene hasta las 11:00 del día siguiente, luego se libera y se penaliza con el 100% de la estadía.
+- Política de Menores: Obligatorio Registro Civil o Tarjeta de Identidad. Si viajan con terceros, requiere permiso notarial de los padres. Niños de 2 a 11 años pagan tarifa infantil. Infantes menores de 2 años no pagan. Mayores de 12 años pagan como adulto.
+- Responsabilidad de Valores: El hotel no responde por bienes no guardados en la caja de seguridad digital de la habitación o en la recepción.
+
+MÓDULO 6: LOGÍSTICA, SERVICIOS TÉCNICOS Y ACCESIBILIDAD
+- Agua Caliente: Disponible las 24 horas mediante calentadores solares. Tarda de 30 a 45 segundos en regularse. El agua de la llave no es potable.
+- Energía y Conectividad: Energía fotovoltaica 110V (Tomas A y B). Wi-Fi satelital Starlink gratis (`Aura_Vitalis_Guest`), sin contraseña (portal cautivo).
+- Parqueadero: Vigilado, gratuito, operativo 24 horas en la entrada principal. Prohibido ingreso de autos a la zona de villas. Equipaje se traslada en carritos de golf eléctricos del hotel.
+- Cómo llegar desde Aeropuerto Santa Marta (SMR): 1h 15min (42 km) por la Troncal del Caribe hacia el oriente. El hotel está a la izquierda, 5 minutos antes del Sector El Zaino (Parque Tayrona). Autobuses intermunicipales ruta Santa Marta-Palomino dejan en la entrada.
+- Shuttle Privado: Camionetas desde Aeropuerto Santa Marta ($60 USD) o Barranquilla ($140 USD) por trayecto (hasta 4 personas). Requiere reserva con 24 horas de anticipación.

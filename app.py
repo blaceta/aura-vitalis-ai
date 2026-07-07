@@ -1,7 +1,9 @@
 import os
 import csv
 from datetime import datetime
+import google.generativeai as genai
 import streamlit as st
+import requests
 
 # Componentes de Orquestación de IA
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -10,7 +12,9 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
-
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_core.runnables import Runnable
+from langchain_core.messages import AIMessage
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -31,8 +35,9 @@ def inicializar_motor_rag():
         
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1200, chunk_overlap=200)
     chunks = text_splitter.create_documents([documento_texto])
-    
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
     vector_store = Chroma.from_documents(chunks, embeddings)
     return vector_store.as_retriever(search_kwargs={"k": 3})
 
@@ -102,7 +107,33 @@ else:
             st.session_state.messages.append({"role": "user", "content": prompt_usuario})
 
             # Construir e invocar la cadena de IA
-            llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.1)
+            class NativeGeminiChat(Runnable):
+                def invoke(self, inputs, config=None, **kwargs):
+                    url = (f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={os.getenv('GOOGLE_API_KEY')}")
+                    if hasattr(inputs, "to_string"):
+                        prompt_final = inputs.to_string()
+                    elif isinstance(inputs, dict):
+                        prompt_final = inputs.get("input", str(inputs))
+                    else:
+                        prompt_final = str(inputs)
+
+                    payload = {
+                        "contents": [{
+                            "parts": [{"text": prompt_final}]
+                        }],
+                        "generationConfig": {
+                            "temperature": 0.1
+                        }
+                    }
+
+                    response = requests.post(url, json=payload)
+                    if response.status_code == 200:
+                        res_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+                        return AIMessage(content=res_text)
+                    else:
+                        raise Exception(f"Error en Gemini API: {response.text}")
+            llm = NativeGeminiChat()
+
             system_prompt = (
                 f"Eres el Concierge de Bienestar de 'Aura Vitalis Eco-Resort & Spa'.\n"
                 f"El usuario interactuando es un: {perfil_usuario}\n"

@@ -1,0 +1,25 @@
+1. Protocolo de Descubrimiento (Captura del "Motivo de Viaje"):
+
+Objetivo: Todo perfilamiento de un nuevo prospecto debe incluir la identificación del propósito del viaje para personalizar la propuesta de valor.
+
+Tipologías comunes: Aniversario/Romance, Retiro de desconexión por estrés, Vacaciones familiares, Viaje de negocios/teletrabajo.
+
+Instrucción para el Concierge: Durante la fase de cotización o antes de solicitar los datos de contacto, se debe indagar sutilmente la motivación del usuario (ej. "Para asegurarme de recomendarle el plan más adecuado, ¿nos visitaría por alguna ocasión especial o busca un retiro de descanso?").
+
+2. Acuerdos de Nivel de Servicio (SLA) para Requerimientos y Mantenimiento:
+
+Para mantener nuestro estándar operativo, todos los reportes de huéspedes se rigen por tiempos de ciclo estrictos que el Concierge debe comunicar con transparencia:
+
+Requerimientos de Habitación (Toallas, Room Service, Amenities): Tiempo máximo de respuesta en puerta: 10 minutos.
+
+Incidencias Técnicas o Mantenimiento (Aire acondicionado, agua, iluminación): Tiempo máximo de respuesta técnica en puerta: 15 minutos.
+
+Emergencias (Salud, seguridad): Respuesta inmediata (menos de 3 minutos).
+
+3. Protocolo de Recuperación de Servicio (Gestión de Desviaciones):
+
+Definición: Cualquier queja sobre ruido, limpieza, o fallas en las instalaciones se considera un "defecto crítico" en la experiencia que debe ser mitigado en el primer punto de contacto.
+
+Acciones Correctivas Autorizadas: El Concierge tiene autoridad operativa para ofrecer una compensación inmediata al huésped mientras el equipo técnico resuelve el problema raíz.
+
+Guion de mitigación: Se debe pedir disculpas por la desviación en el estándar, asegurar la visita técnica en el tiempo SLA correspondiente, y ofrecer la siguiente cortesía: "Como gesto de disculpa por este inconveniente, he autorizado un cóctel o bebida détox de cortesía para usted en nuestro restaurante 'Raíces' o en la zona de piscina mientras solucionamos el detalle."

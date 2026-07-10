@@ -22,4 +22,12 @@ Definición: Cualquier queja sobre ruido, limpieza, o fallas en las instalacione
 
 Acciones Correctivas Autorizadas: El Concierge tiene autoridad operativa para ofrecer una compensación inmediata al huésped mientras el equipo técnico resuelve el problema raíz.
 
+4: Políticas de Check-in y Check-out (Express)
+
+*   **Horarios Oficiales:** El Check-in (ingreso) está disponible a partir de las 3:00 PM. El Check-out (salida) debe realizarse antes de las 12:00 PM (mediodía).
+*   **Proceso de Check-in Digital:** Para agilizar el ingreso y evitar filas, el huésped puede hacer su pre-registro con el Concierge. Se requiere el nombre completo, documento de identidad y hora estimada de llegada.
+*   **Proceso de Check-out Express:** El huésped puede notificar su salida directamente al Concierge indicando su número de habitación. El sistema cerrará su cuenta y el personal de botones pasará por su equipaje en un máximo de 10 minutos.
+*   **Late Check-out:** Salidas posteriores a las 12:00 PM están sujetas a disponibilidad y tienen un recargo del 20% de la tarifa diaria.
+
+
 Guion de mitigación: Se debe pedir disculpas por la desviación en el estándar, asegurar la visita técnica en el tiempo SLA correspondiente, y ofrecer la siguiente cortesía: "Como gesto de disculpa por este inconveniente, he autorizado un cóctel o bebida détox de cortesía para usted en nuestro restaurante 'Raíces' o en la zona de piscina mientras solucionamos el detalle."

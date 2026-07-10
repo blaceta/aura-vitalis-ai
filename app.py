@@ -4,6 +4,7 @@ from datetime import datetime
 import google.generativeai as genai
 import streamlit as st
 import requests
+import re
 
 # Componentes de Orquestación de IA
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -106,6 +107,58 @@ else:
                 st.markdown(prompt_usuario)
             st.session_state.messages.append({"role": "user", "content": prompt_usuario})
 
+            def guardar_datos_csv(texto_respuesta):
+    fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # 1. Buscar y guardar Leads
+    match_lead = re.search(r'\[REGISTRAR_LEAD:(.*?)\]', texto_respuesta, re.IGNORECASE)
+    if match_lead:
+        datos = match_lead.group(1).strip()
+        archivo = 'clientes_potenciales.csv'
+        if not os.path.exists(archivo):
+            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                csv.writer(f).writerow(['Fecha_Hora', 'Datos_Prospecto'])
+        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+            csv.writer(f).writerow([fecha_actual, datos])
+        texto_respuesta = re.sub(r'\[REGISTRAR_LEAD:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+
+    # 2. Buscar y guardar Mantenimiento
+    match_maint = re.search(r'\[ALERTA_MANTENIMIENTO:(.*?)\]', texto_respuesta, re.IGNORECASE)
+    if match_maint:
+        datos = match_maint.group(1).strip()
+        archivo = 'reportes_mantenimiento.csv'
+        if not os.path.exists(archivo):
+            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                csv.writer(f).writerow(['Fecha_Hora', 'Reporte_Habitacion'])
+        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+            csv.writer(f).writerow([fecha_actual, datos])
+        texto_respuesta = re.sub(r'\[ALERTA_MANTENIMIENTO:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+
+    # 3. Buscar y guardar Check-in
+    match_checkin = re.search(r'\[REGISTRAR_CHECKIN:(.*?)\]', texto_respuesta, re.IGNORECASE)
+    if match_checkin:
+        datos = match_checkin.group(1).strip()
+        archivo = 'registros_checkin.csv'
+        if not os.path.exists(archivo):
+            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                csv.writer(f).writerow(['Fecha_Hora_Registro', 'Datos_Llegada'])
+        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+            csv.writer(f).writerow([fecha_actual, datos])
+        texto_respuesta = re.sub(r'\[REGISTRAR_CHECKIN:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+
+    # 4. Buscar y guardar Check-out
+    match_checkout = re.search(r'\[ALERTA_CHECKOUT:(.*?)\]', texto_respuesta, re.IGNORECASE)
+    if match_checkout:
+        datos = match_checkout.group(1).strip()
+        archivo = 'alertas_checkout.csv'
+        if not os.path.exists(archivo):
+            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                csv.writer(f).writerow(['Fecha_Hora_Salida', 'Habitacion'])
+        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+            csv.writer(f).writerow([fecha_actual, datos])
+        texto_respuesta = re.sub(r'\[ALERTA_CHECKOUT:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+
+    return texto_respuesta.strip()
             # Construir e invocar la cadena de IA
             class NativeGeminiChat(Runnable):
                 def invoke(self, inputs, config=None, **kwargs):
@@ -128,7 +181,11 @@ else:
 
                     response = requests.post(url, json=payload)
                     if response.status_code == 200:
+                        if response.status_code == 200:         
+                     
                         res_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+                        # --- NUEVA LÍNEA: Interceptar datos y limpiar texto ---
+                        res_text = guardar_datos_csv(res_text)
                         return AIMessage(content=res_text)
                     else:
                         raise Exception(f"Error en Gemini API: {response.text}")
@@ -142,7 +199,9 @@ else:
                 "1. Si preguntan datos del manual (horarios, políticas, wifi), responde directo sin pedir datos ni etiquetas.\n"
                 "2. INDECISIÓN COMERCIAL: Si duda en reservar, pide NOMBRE y CONTACTO. Al final agrega: '[REGISTRAR_LEAD: Motivo]'.\n"
                 "3. RECLAMOS: Si está molesto, discúlpate empáticamente y agrega al final: '[ALERTA_QUEJA: Detalles]'.\n"
-                "Contexto:\n{context}"
+                "4. Contexto:\n{context}"
+                "5. CHECK-IN DIGITAL: Si un usuario con reserva confirmada desea hacer check-in, pídele su nombre completo y hora estimada de llegada. Finaliza diciendo: 'Su pre-registro está listo, lo esperamos con una bebida de bienvenida.' y agrega: '[REGISTRAR_CHECKIN: Nombre - Hora LLegada]'.\n"
+                "6. CHECK-OUT EXPRESS: Si un huésped desea entregar la habitación, pídele su número de habitación. Finaliza diciendo: 'Hemos procesado su salida. El personal de botones va por su equipaje. ¡Buen viaje!' y agrega: '[ALERTA_CHECKOUT: Habitación]'.\n"
             )
             
             prompt_template = ChatPromptTemplate.from_messages([("system", system_prompt), ("human", "{input}")])

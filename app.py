@@ -105,60 +105,64 @@ else:
             # Mostrar pregunta del usuario
             with st.chat_message("user"):
                 st.markdown(prompt_usuario)
-            st.session_state.messages.append({"role": "user", "content": prompt_usuario})
+                st.session_state.messages.append({"role": "user", "content": prompt_usuario})
+            if "messages" in st.session_state and len(st.session_state.messages):
+                ultimo_mensaje_bot = st.session_state.messages[-2]["content"]
+                historial_reciente = f"Contexto previo de la conversacion: tu preguntaste esto: '{ultimo_mensaje_bot}'."
+            prompt_enriquecida = f"{historial_reciente} Ahora el usuario responde: '{prompt_usuario}'. Aplica las reglas y continua el proceso."
 
             def guardar_datos_csv(texto_respuesta):
-    fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+                fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     # 1. Buscar y guardar Leads
-    match_lead = re.search(r'\[REGISTRAR_LEAD:(.*?)\]', texto_respuesta, re.IGNORECASE)
-    if match_lead:
-        datos = match_lead.group(1).strip()
-        archivo = 'clientes_potenciales.csv'
-        if not os.path.exists(archivo):
-            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
-                csv.writer(f).writerow(['Fecha_Hora', 'Datos_Prospecto'])
-        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
-            csv.writer(f).writerow([fecha_actual, datos])
-        texto_respuesta = re.sub(r'\[REGISTRAR_LEAD:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+                match_lead = re.search(r'\[REGISTRAR_LEAD:(.*?)\]', texto_respuesta, re.IGNORECASE)
+                if match_lead:
+                    datos = match_lead.group(1).strip()
+                    archivo = 'clientes_potenciales.csv'
+       	            if not os.path.exists(archivo):
+                        with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                            csv.writer(f).writerow(['Fecha_Hora', 'Datos_Prospecto'])
+                    with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+                       csv.writer(f).writerow([fecha_actual, datos])
+                    texto_respuesta = re.sub(r'\[REGISTRAR_LEAD:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
 
     # 2. Buscar y guardar Mantenimiento
-    match_maint = re.search(r'\[ALERTA_MANTENIMIENTO:(.*?)\]', texto_respuesta, re.IGNORECASE)
-    if match_maint:
-        datos = match_maint.group(1).strip()
-        archivo = 'reportes_mantenimiento.csv'
-        if not os.path.exists(archivo):
-            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
-                csv.writer(f).writerow(['Fecha_Hora', 'Reporte_Habitacion'])
-        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
-            csv.writer(f).writerow([fecha_actual, datos])
-        texto_respuesta = re.sub(r'\[ALERTA_MANTENIMIENTO:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+                match_maint = re.search(r'\[ALERTA_MANTENIMIENTO:(.*?)\]', texto_respuesta, re.IGNORECASE)
+                if match_maint:
+                    datos = match_maint.group(1).strip()
+                    archivo = 'reportes_mantenimiento.csv'
+                    if not os.path.exists(archivo):
+                        with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                            csv.writer(f).writerow(['Fecha_Hora', 'Reporte_Habitacion'])
+                    with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+                        csv.writer(f).writerow([fecha_actual, datos])
+                    texto_respuesta = re.sub(r'\[ALERTA_MANTENIMIENTO:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
 
     # 3. Buscar y guardar Check-in
-    match_checkin = re.search(r'\[REGISTRAR_CHECKIN:(.*?)\]', texto_respuesta, re.IGNORECASE)
-    if match_checkin:
-        datos = match_checkin.group(1).strip()
-        archivo = 'registros_checkin.csv'
-        if not os.path.exists(archivo):
-            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
-                csv.writer(f).writerow(['Fecha_Hora_Registro', 'Datos_Llegada'])
-        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
-            csv.writer(f).writerow([fecha_actual, datos])
-        texto_respuesta = re.sub(r'\[REGISTRAR_CHECKIN:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+                match_checkin = re.search(r'\[REGISTRAR_CHECKIN:(.*?)\]', texto_respuesta, re.IGNORECASE)
+                if match_checkin:
+                    datos = match_checkin.group(1).strip()
+                    archivo = 'registros_checkin.csv'
+                    if not os.path.exists(archivo):
+                        with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                            csv.writer(f).writerow(['Fecha_Hora_Registro', 'Datos_Llegada'])
+                    with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+                        csv.writer(f).writerow([fecha_actual, datos])
+                    texto_respuesta = re.sub(r'\[REGISTRAR_CHECKIN:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
 
     # 4. Buscar y guardar Check-out
-    match_checkout = re.search(r'\[ALERTA_CHECKOUT:(.*?)\]', texto_respuesta, re.IGNORECASE)
-    if match_checkout:
-        datos = match_checkout.group(1).strip()
-        archivo = 'alertas_checkout.csv'
-        if not os.path.exists(archivo):
-            with open(archivo, mode='w', newline='', encoding='utf-8') as f:
-                csv.writer(f).writerow(['Fecha_Hora_Salida', 'Habitacion'])
-        with open(archivo, mode='a', newline='', encoding='utf-8') as f:
-            csv.writer(f).writerow([fecha_actual, datos])
-        texto_respuesta = re.sub(r'\[ALERTA_CHECKOUT:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
+                match_checkout = re.search(r'\[ALERTA_CHECKOUT:(.*?)\]', texto_respuesta, re.IGNORECASE)
+                if match_checkout:
+                    datos = match_checkout.group(1).strip()
+                    archivo = 'alertas_checkout.csv'
+                    if not os.path.exists(archivo):
+                        with open(archivo, mode='w', newline='', encoding='utf-8') as f:
+                            csv.writer(f).writerow(['Fecha_Hora_Salida', 'Habitacion'])
+                    with open(archivo, mode='a', newline='', encoding='utf-8') as f:
+                        csv.writer(f).writerow([fecha_actual, datos])
+                    texto_respuesta = re.sub(r'\[ALERTA_CHECKOUT:.*?\]', '', texto_respuesta, flags=re.IGNORECASE)
 
-    return texto_respuesta.strip()
+                return texto_respuesta.strip()
             # Construir e invocar la cadena de IA
             class NativeGeminiChat(Runnable):
                 def invoke(self, inputs, config=None, **kwargs):
@@ -181,8 +185,6 @@ else:
 
                     response = requests.post(url, json=payload)
                     if response.status_code == 200:
-                        if response.status_code == 200:         
-                     
                         res_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
                         # --- NUEVA LÍNEA: Interceptar datos y limpiar texto ---
                         res_text = guardar_datos_csv(res_text)
@@ -202,12 +204,13 @@ else:
                 "4. Contexto:\n{context}"
                 "5. CHECK-IN DIGITAL: Si un usuario con reserva confirmada desea hacer check-in, pídele su nombre completo y hora estimada de llegada. Finaliza diciendo: 'Su pre-registro está listo, lo esperamos con una bebida de bienvenida.' y agrega: '[REGISTRAR_CHECKIN: Nombre - Hora LLegada]'.\n"
                 "6. CHECK-OUT EXPRESS: Si un huésped desea entregar la habitación, pídele su número de habitación. Finaliza diciendo: 'Hemos procesado su salida. El personal de botones va por su equipaje. ¡Buen viaje!' y agrega: '[ALERTA_CHECKOUT: Habitación]'.\n"
+                "7. CIERRE DE CONVERSACION: Si el usuario se despide, dice 'gracias' sin hacer otra pregunta, o indica claramente que ya no necesita mas asistencia , despidete de manera formal, cortes y muy breve. TIENES PROHIBIDO hacer preguntas adiconales o dejar la conversacion abierta (ej. no digas 'hay algo mas en lo que te pueda ayudar?'). Simplemente despidete y cierra el ciclo.\n"
             )
             
             prompt_template = ChatPromptTemplate.from_messages([("system", system_prompt), ("human", "{input}")])
             rag_chain = create_retrieval_chain(retriever, create_stuff_documents_chain(llm, prompt_template))
             
-            response = rag_chain.invoke({"input": prompt_usuario})
+            response = rag_chain.invoke({"input": prompt_enriquecida})
             respuesta_raw = response["answer"]
 
             # --- PROCESAR INTERCEPTORES EN LA INTERFAZ GRÁFICA ---

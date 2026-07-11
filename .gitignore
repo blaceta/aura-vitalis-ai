@@ -5,3 +5,4 @@ __pycache__/
 # Ocultar solo los reportes dinámicos, NO la carpeta entera
 data/leads_seguimiento.csv
 data/incidentes_criticos.csv
+chroma_db/

@@ -23,6 +23,41 @@ load_dotenv()
 # 1. CONFIGURACIÓN DE PÁGINA E INICIALIZACIÓN
 # ==========================================
 st.set_page_config(page_title="Concierge Aura Vitalis", page_icon="🤖", layout="centered")
+st.markdown("""
+<style>
+/* Ocultar elementos por defecto */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+headder {visibility: hidden;}
+/* 1. Area principal (Chat y contenido) - Color claro */
+.stApp {
+    background-color: #F0F7F4; /* Verde suave*/
+}
+/* 2. Barra lateral (selector de visitante) - color oscuro */
+[data-testid="stSidebar"] {
+    background-color: #1E3F2D; /* verde profundo */
+}
+/* 3. Asegurar que los textos en la barra sean legibles */
+[data-testid="stSidebar"] * {
+    color: #FFFFFF !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.title("Aura Vitalis Eco - Resort")
+st.caption("Tu Concierge de Bienestar 24/7. En que te puedo consentir hoy?")
+st.image("assets/fachada.png", use_container_width=True)
+
+st.markdown("### Descubre Aura Vitalis")
+tab1, tab2, tab3 = st.tabs(["Exterior", "Yoga", "Piscina"])
+with tab1:
+    st.video("assets/recorrido.mp4")
+with tab2:
+    st.video("assets/yoga.mp4")
+with tab3:
+    st.video("assets/piscina.mp4")
+
+st.divider()
 
 # Mantener la base de datos vectorial en la caché de Streamlit para que no se recargue en cada clic
 @st.cache_resource
@@ -33,7 +68,6 @@ def inicializar_motor_rag():
         
     with open(ruta_manual, "r", encoding="utf-8") as f:
         documento_texto = f.read()
-        
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1200, chunk_overlap=200)
     chunks = text_splitter.create_documents([documento_texto])
 
@@ -193,81 +227,100 @@ else:
                         raise Exception(f"Error en Gemini API: {response.text}")
             llm = NativeGeminiChat()
 
-            system_prompt = (
-                f"Eres el Concierge de Bienestar de 'Aura Vitalis Eco-Resort & Spa'.\n"
-                f"El usuario interactuando es un: {perfil_usuario}\n"
-                f"Regla de Control de Medios: {regla_multimedia}\n\n"
-                "JERARQUÍA:\n"
-                "1. Si preguntan datos del manual (horarios, políticas, wifi), responde directo sin pedir datos ni etiquetas.\n"
-                "2. INDECISIÓN COMERCIAL: Si duda en reservar, pide NOMBRE y CONTACTO. Al final agrega: '[REGISTRAR_LEAD: Motivo]'.\n"
-                "3. RECLAMOS: Si está molesto, discúlpate empáticamente y agrega al final: '[ALERTA_QUEJA: Detalles]'.\n"
-                "4. Contexto:\n{context}"
-                "5. CHECK-IN DIGITAL: Si un usuario con reserva confirmada desea hacer check-in, pídele su nombre completo y hora estimada de llegada. Finaliza diciendo: 'Su pre-registro está listo, lo esperamos con una bebida de bienvenida.' y agrega: '[REGISTRAR_CHECKIN: Nombre - Hora LLegada]'.\n"
-                "6. CHECK-OUT EXPRESS: Si un huésped desea entregar la habitación, pídele su número de habitación. Finaliza diciendo: 'Hemos procesado su salida. El personal de botones va por su equipaje. ¡Buen viaje!' y agrega: '[ALERTA_CHECKOUT: Habitación]'.\n"
-                "7. CIERRE DE CONVERSACION: Si el usuario se despide, dice 'gracias' sin hacer otra pregunta, o indica claramente que ya no necesita mas asistencia , despidete de manera formal, cortes y muy breve. TIENES PROHIBIDO hacer preguntas adiconales o dejar la conversacion abierta (ej. no digas 'hay algo mas en lo que te pueda ayudar?'). Simplemente despidete y cierra el ciclo.\n"
-            )
-            
+            system_prompt = """
+                Eres el Concierge de Bienestar de 'Aura Vitalis Eco-Resort & Spa'.
+                El usuario interactuando es un: {perfil_usuario}
+                Regla de Control de Medios: {regla_multimedia}
+                JERARQUÍA:
+                1. Si preguntan datos del manual (horarios, políticas, wifi), responde directo sin pedir datos ni etiquetas.
+                2. INDECISIÓN COMERCIAL: Si duda en reservar, pide NOMBRE y CONTACTO. Al final agrega: '[REGISTRAR_LEAD: Motivo]'.
+                3. RECLAMOS: Si está molesto, discúlpate empáticamente y agrega al final: '[ALERTA_QUEJA: Detalles]'.
+                4. Contexto:{context}"
+                5. CHECK-IN DIGITAL: Si un usuario con reserva confirmada desea hacer check-in, pídele su nombre completo y hora estimada de llegada. Finaliza diciendo: 'Su pre-registro está listo, lo esperamos con una bebida de bienvenida.' y agrega: '[REGISTRAR_CHECKIN: Nombre - Hora LLegada]'.
+                6. CHECK-OUT EXPRESS: Si un huésped desea entregar la habitación, pídele su número de habitación. Finaliza diciendo: 'Hemos procesado su salida. El personal de botones va por su equipaje. ¡Buen viaje!' y agrega: '[ALERTA_CHECKOUT: Habitación]'.
+                7. CIERRE DE CONVERSACION: Si el usuario se despide, dice 'gracias' sin hacer otra pregunta, o indica claramente que ya no necesita mas asistencia , despidete de manera formal, cortes y muy breve. TIENES PROHIBIDO hacer preguntas adiconales o dejar la conversacion abierta (ej. no digas 'hay algo mas en lo que te pueda ayudar?'). Simplemente despidete y cierra el ciclo.
+                8. IMAGENES DE HABITACIONES: Si te preguntan por un tipo de habitacion o por las instalaciones del eco - resort , debes incluir en tu respuesta, justo antes de empezar la descripcion, la siguiente etiqueta exacta: '[MOSTRAR_IMAGEN:assets/nombre_de_la_imagen.png]', reemplazando 'nombre_de_la_imagen.png' con el nombre correcto de la foto en la carpeta 'assets' para esa area. No muestres la etiqueta al usuario, yo la interceptare.
+                 **Ejemplos de etiquetas de imagen que debes usar:**
+                 * Para la habitacion Ocean_Wellness_villa: '[MOSTRAR_IMAGEN:assets/Ocean_wellness_villa.png]'
+                 * Para la habitacion Canopy_bungalow: '[MOSTRAR_IMAGEN:assets/canopy_bungalow-png]'
+                 * Para la piscina agua viva: '[MOSTRAR_IMAGEN:assets/agua_viva.png]'
+            """
+
             prompt_template = ChatPromptTemplate.from_messages([("system", system_prompt), ("human", "{input}")])
             rag_chain = create_retrieval_chain(retriever, create_stuff_documents_chain(llm, prompt_template))
-            
-            response = rag_chain.invoke({"input": prompt_enriquecida})
-            respuesta_raw = response["answer"]
 
             # --- PROCESAR INTERCEPTORES EN LA INTERFAZ GRÁFICA ---
             with st.chat_message("assistant"):
+                try:
+                    response = rag_chain.invoke({"input": prompt_enriquecido})
+                    respuesta_raw = response["answer"]
+
+                    if "[MOSTRAR_IMAGEN:" in respuesta_raw:
+                        try:
+                            ruta_imagen = respuesta_raw.split("[MOSTRAR_IMAGEN:")[1].split("]")[0].strip()
+                            texto_limpio = respuesta_raw.split("[MOSTRAR_IMAGEN:")[0].strip() + respuesta_raw.split("]")[1].strip()
+                            st.image(ruta_image, use_container_width=true, caption="Nuestra Habitacion")
+                            st.markdown(texto_limpio)
+                        except IndexError:
+                            st.markdown(respuesta_raw)
+
                 # Caso A: Captura Comercial (Lead)
-                if "[REGISTRAR_LEAD:" in respuesta_raw:
-                    texto_limpio = respuesta_raw.split("[REGISTRAR_LEAD:")[0].strip()
-                    motivo = respuesta_raw.split("[REGISTRAR_LEAD:")[1].replace("]", "").strip()
+                    if "[REGISTRAR_LEAD:" in respuesta_raw:
+                        texto_limpio = respuesta_raw.split("[REGISTRAR_LEAD:")[0].strip()
+                        motivo = respuesta_raw.split("[REGISTRAR_LEAD:")[1].replace("]", "").strip()
                     
-                    st.markdown(texto_limpio)
-                    st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
+                        st.markdown(texto_limpio)
+                        st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
                     
                     # Formulario embebido nativo de Streamlit
-                    with st.form("form_lead"):
-                        st.write("📝 **Deje sus datos para asignarle un asesor experto:**")
-                        nombre = st.text_input("Nombre completo")
-                        contacto = st.text_input("Correo o Teléfono")
-                        submit = st.form_submit_button("Solicitar Atención Personalizada")
-                        if submit:
-                            registrar_evento_sistema("leads_seguimiento.csv", ["Fecha", "Nombre", "Contacto", "Motivo"], [datetime.now(), nombre, contacto, motivo])
-                            st.success("✨ ¡Datos transferidos! Un asesor se comunicará con usted pronto.")
-                            st.session_state.bloqueado = True
-                            st.rerun()
+                        with st.form("form_lead"):
+                            st.write("📝 **Deje sus datos para asignarle un asesor experto:**")
+                            nombre = st.text_input("Nombre completo")
+                            contacto = st.text_input("Correo o Teléfono")
+                            submit = st.form_submit_button("Solicitar Atención Personalizada")
+                            if submit:
+                                registrar_evento_sistema("leads_seguimiento.csv", ["Fecha", "Nombre", "Contacto", "Motivo"], [datetime.now(), nombre, contacto, motivo])
+                                st.success("✨ ¡Datos transferidos! Un asesor se comunicará con usted pronto.")
+                                st.session_state.bloqueado = True
+                                st.rerun()
 
                 # Caso B: Gestión de Reclamos (Quejas)
-                elif "[ALERTA_QUEJA:" in respuesta_raw:
-                    texto_limpio = respuesta_raw.split("[ALERTA_QUEJA:")[0].strip()
-                    incidencia = respuesta_raw.split("[ALERTA_QUEJA:")[1].replace("]", "").strip()
+                    elif "[ALERTA_QUEJA:" in respuesta_raw:
+                        texto_limpio = respuesta_raw.split("[ALERTA_QUEJA:")[0].strip()
+                        incidencia = respuesta_raw.split("[ALERTA_QUEJA:")[1].replace("]", "").strip()
                     
-                    st.markdown(texto_limpio)
-                    st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
+                        st.markdown(texto_limpio)
+                        st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
                     
                     # Petición de número de villa integrada
-                    villa = st.text_input("Confirme su número de villa para enviar asistencia técnica inmediata:", key="villa_input")
-                    if st.button("Enviar Alerta Prioritaria"):
-                        registrar_evento_sistema("incidentes_criticos.csv", ["Fecha", "Villa", "Incidencia"], [datetime.now(), villa, incidencia])
-                        st.warning("🚨 Reporte técnico enviado con éxito al Supervisor de Turno.")
+                        villa = st.text_input("Confirme su número de villa para enviar asistencia técnica inmediata:", key="villa_input")
+                        if st.button("Enviar Alerta Prioritaria"):
+                            registrar_evento_sistema("incidentes_criticos.csv", ["Fecha", "Villa", "Incidencia"], [datetime.now(), villa, incidencia])
+                            st.warning("🚨 Reporte técnico enviado con éxito al Supervisor de Turno.")
 
                 # Caso C: Proyección de Imágenes incorporadas
-                elif "[MOSTRAR_IMAGEN:" in respuesta_raw:
-                    texto_limpio = respuesta_raw.split("[MOSTRAR_IMAGEN:")[0].strip()
-                    url_img = respuesta_raw.split("[MOSTRAR_IMAGEN:")[1].replace("]", "").strip()
+                    elif "[MOSTRAR_IMAGEN:" in respuesta_raw:
+                        texto_limpio = respuesta_raw.split("[MOSTRAR_IMAGEN:")[0].strip()
+                        url_img = respuesta_raw.split("[MOSTRAR_IMAGEN:")[1].replace("]", "").strip()
                     
-                    st.markdown(texto_limpio)
-                    st.image(url_img, caption="Instalaciones del Resort", use_container_width=True)
-                    st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
+                        st.markdown(texto_limpio)
+                        st.image(url_img, caption="Instalaciones del Resort", use_container_width=True)
+                        st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
 
                 # Caso D: Proyección de Videos
-                elif "[MOSTRAR_VIDEO:" in respuesta_raw:
-                    texto_limpio = respuesta_raw.split("[MOSTRAR_VIDEO:")[0].strip()
-                    url_vid = respuesta_raw.split("[MOSTRAR_VIDEO:")[1].replace("]", "").strip()
+                    elif "[MOSTRAR_VIDEO:" in respuesta_raw:
+                        texto_limpio = respuesta_raw.split("[MOSTRAR_VIDEO:")[0].strip()
+                        url_vid = respuesta_raw.split("[MOSTRAR_VIDEO:")[1].replace("]", "").strip()
                     
-                    st.markdown(texto_limpio)
-                    st.video(url_vid)
-                    st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
+                        st.markdown(texto_limpio)
+                        st.video(url_vid)
+                        st.session_state.messages.append({"role": "assistant", "content": texto_limpio})
 
                 # Caso Común: Texto Plano
-                else:
-                    st.markdown(respuesta_raw)
-                    st.session_state.messages.append({"role": "assistant", "content": respuesta_raw})
+                    else:
+                        st.markdown(respuesta_raw)
+                        st.session_state.messages.append({"role": "assistant", "content": respuesta_raw})
+                except Exception as e:
+                    mensaje_emergencia = "Disculpa, en este momento el sistema tiene alta demanda de usuarios. Podrias volver a intentarlo mas tarde. Gracias y disculpa las molestias"
+                    st.markdown(mensaje_emergencia)
+                    print(f"Error tecnico interceptado: {e}")

@@ -6,7 +6,7 @@ La aplicación está construida sobre **Streamlit** para ofrecer una interfaz fl
 
 ---
 
-## La app estará disponible en: http://157.137.226.41:8501/#aura-vitalis-eco-resort. La evidencia esta en /assets/auraeco.jpg
+## La app estará disponible en: http://157.137.226.41:8501/#aura-vitalis-eco-resort. La evidencia esta en https://github.com/blaceta/aura-vitalis-ai/blob/main/assets/auraeco.jpg
 
 ---
 

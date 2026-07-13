@@ -6,6 +6,10 @@ La aplicación está construida sobre **Streamlit** para ofrecer una interfaz fl
 
 ---
 
+## La app estará disponible en: http://157.137.226.41:8501/#aura-vitalis-eco-resort. La evidencia esta en /assets/auraeco.jpg
+
+---
+
 ## ✨ Características Principales
 
 El sistema ha sido refinado exhaustivamente para ofrecer estabilidad de nivel industrial y una experiencia de usuario (UX) impecable:
@@ -26,6 +30,36 @@ El sistema ha sido refinado exhaustivamente para ofrecer estabilidad de nivel in
 * **Modelo de Lenguaje:** Google Gemini 2.5 Flash.
 * **Base de Conocimiento:** VectorStore ChromaDB (Persistencia de datos del resort).
 * **Entorno:** Python 3.12 desplegado en Servidor Cloud Ubuntu.
+* **Despliegue:** Servidor Ubuntu (Cloud OCI) / Python 3.12
+
+---
+
+## 🚀 Instrucciones de Instalación y Ejecución
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/tu-usuario/aura-vitalis-ai.git](https://github.com/tu-usuario/aura-vitalis-ai.git)
+   cd aura-vitalis-ai
+2. **Instalar dependencias:**
+3. **Configurar la API Key:**
+4. **Ejecutar la aplicación (Modo Producción):**
+
+---
+
+💬 Ejemplos de Preguntas y Respuestas (Por Perfil)
+Perfil 1: Huésped de Relajación (Spa y Bienestar)
+Pregunta 1: "¿Qué tipo de terapias ofrecen en el spa?"
+Respuesta 1: "Ofrecemos una variedad de terapias holísticas, incluyendo masajes de tejido profundo, aromaterapia con esencias locales y sesiones de hidrotermia. ¿Te gustaría que te muestre un video de nuestras instalaciones?"
+
+Pregunta 2: "Quiero reservar un masaje para el sábado en la tarde."
+Respuesta 2: "¡Será un placer consentirte! Para coordinar el horario exacto y el terapeuta, un miembro de nuestro equipo se pondrá en contacto contigo a la brevedad. (El sistema registra el Lead internamente)."
+
+Perfil 2: Huésped Familiar (Alojamiento y Actividades)
+Pregunta 1: "¿Qué opciones de habitaciones tienen para una familia de 4 personas?"
+Respuesta 1: "Para familias recomendamos nuestra Suite Familiar o dos Habitaciones Deluxe conectadas. Ambas incluyen desayuno orgánico y acceso a las piscinas. Aquí tienes una imagen de la Suite: [Renderiza imagen dinámicamente]"
+
+Pregunta 2: "¿Tienen actividades ecológicas para niños?"
+Respuesta 2: "Sí, contamos con senderismo guiado por profesionales, talleres de siembra y observación de aves, ideales para que los más pequeños conecten con la naturaleza."
 
 ---
 
@@ -41,3 +75,5 @@ aura-vitalis-ai/
 ├── requirements.txt        # Dependencias de Python
 ├── .gitignore              # Filtro protector de archivos (Oculta BD y logs)
 └── README.md               # Documentación del proyecto
+
+---

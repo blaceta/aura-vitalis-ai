@@ -33,6 +33,10 @@ headder {visibility: hidden;}
 .stApp {
     background-color: #F0F7F4; /* Verde suave*/
 }
+/* Texto oscuroen area pincipal */
+.stApp, .stApp p. .stApp h1, .stApp h2, .stApp h3, .stApp span {
+    color: #1A1A1A !important;
+}
 /* 2. Barra lateral (selector de visitante) - color oscuro */
 [data-testid="stSidebar"] {
     background-color: #1E3F2D; /* verde profundo */
@@ -117,7 +121,9 @@ else:
         regla_multimedia = "PROHIBIDO mostrar el video promocional general ([MOSTRAR_VIDEO]). Concéntrate en soporte logístico y solución de quejas."
     else:
         perfil_usuario = "CLIENTE POTENCIAL INTERESADO DESDE CANAL DIGITAL."
-        regla_multimedia = "Puedes desplegar el video corporativo usando la etiqueta [MOSTRAR_VIDEO] si piden ver el hotel."
+        regla_multimedia = """PASO 1 (Solo texto): Si el usuario pregunta "tipos de habitaciones tienen" o piden informacion de las mismas , DEBES limitarte a describir las habitaciones y sus caracteristicas basandote en los documentos. Al final de tu explicacion, invitalo preguntando: te gustaria ver una fotografia de nuestra habitacion". Esta estrictamente prohibido incluir la etiqueta de imagen en este paso!
+                           Paso 2 (Mostrar imagen): SOLO SI el usuario pide rxplicitamente "ver", "mostrar foto", o dice "si" del Paso 1. DEBES incluir al final de tu respuesta esta etiqueta exacta [MOSTRAR_IMAGEN: assets/nombre_exacto_de_tu_foto.pgn]
+                           """
 
     # Inicializar el historial de chat en la sesión si no existe
     if "messages" not in st.session_state:
@@ -241,9 +247,9 @@ else:
                 7. CIERRE DE CONVERSACION: Si el usuario se despide, dice 'gracias' sin hacer otra pregunta, o indica claramente que ya no necesita mas asistencia , despidete de manera formal, cortes y muy breve. TIENES PROHIBIDO hacer preguntas adiconales o dejar la conversacion abierta (ej. no digas 'hay algo mas en lo que te pueda ayudar?'). Simplemente despidete y cierra el ciclo.
                 8. IMAGENES DE HABITACIONES: Si te preguntan por un tipo de habitacion o por las instalaciones del eco - resort , debes incluir en tu respuesta, justo antes de empezar la descripcion, la siguiente etiqueta exacta: '[MOSTRAR_IMAGEN:assets/nombre_de_la_imagen.png]', reemplazando 'nombre_de_la_imagen.png' con el nombre correcto de la foto en la carpeta 'assets' para esa area. No muestres la etiqueta al usuario, yo la interceptare.
                  **Ejemplos de etiquetas de imagen que debes usar:**
-                 * Para la habitacion Ocean_Wellness_villa: '[MOSTRAR_IMAGEN:assets/Ocean_wellness_villa.png]'
-                 * Para la habitacion Canopy_bungalow: '[MOSTRAR_IMAGEN:assets/canopy_bungalow-png]'
-                 * Para la piscina agua viva: '[MOSTRAR_IMAGEN:assets/agua_viva.png]'
+                 * Para la habitacion Ocean_Wellness_villa: '[MOSTRAR_IMAGEN: assets/Ocean_Wellness_Villa.png]'
+                 * Para la habitacion Canopy_bungalow: '[MOSTRAR_IMAGEN: assets/canopy_bungalow.png]'
+                 * Para la piscina agua viva: '[MOSTRAR_IMAGEN: assets/agua_viva.png]'
             """
 
             prompt_template = ChatPromptTemplate.from_messages([("system", system_prompt), ("human", "{input}")])
@@ -252,14 +258,18 @@ else:
             # --- PROCESAR INTERCEPTORES EN LA INTERFAZ GRÁFICA ---
             with st.chat_message("assistant"):
                 try:
-                    response = rag_chain.invoke({"input": prompt_enriquecido})
+                    response = rag_chain.invoke(
+                        {"input": prompt_enriquecida,
+                        "perfil_usuario": perfil_usuario,
+                        "regla_multimedia": regla_multimedia
+                    })
                     respuesta_raw = response["answer"]
 
                     if "[MOSTRAR_IMAGEN:" in respuesta_raw:
                         try:
                             ruta_imagen = respuesta_raw.split("[MOSTRAR_IMAGEN:")[1].split("]")[0].strip()
                             texto_limpio = respuesta_raw.split("[MOSTRAR_IMAGEN:")[0].strip() + respuesta_raw.split("]")[1].strip()
-                            st.image(ruta_image, use_container_width=true, caption="Nuestra Habitacion")
+                            st.image(ruta_imagen, use_container_width=True, caption="Nuestra Habitacion")
                             st.markdown(texto_limpio)
                         except IndexError:
                             st.markdown(respuesta_raw)
@@ -321,6 +331,7 @@ else:
                         st.markdown(respuesta_raw)
                         st.session_state.messages.append({"role": "assistant", "content": respuesta_raw})
                 except Exception as e:
+                    st.error(f" Error Interno Real: {e}")
                     mensaje_emergencia = "Disculpa, en este momento el sistema tiene alta demanda de usuarios. Podrias volver a intentarlo mas tarde. Gracias y disculpa las molestias"
                     st.markdown(mensaje_emergencia)
                     print(f"Error tecnico interceptado: {e}")
